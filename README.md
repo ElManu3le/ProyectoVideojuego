@@ -6,4 +6,4 @@ Componentes del grupo:
 * [Álvaro Silva Bolea](https://github.com/alvarosilvabolea)
 * [Nicolás Pérez Prades](https://github.com/nico-perez)
 
-* [Nuestro trello](https://trello.com/b/rPLVdcRp/proyectoprogmultiev1)
+[Nuestro trello](https://trello.com/b/rPLVdcRp/proyectoprogmultiev1)
