@@ -1,10 +1,9 @@
-# ProyectoVideojuego
-Proyecto grupal para crear un videojuego    PONER LOS NOMBRES DE LOS COMPONENTES!!!!!
+### Proyecto videojuego EV1 de la asignatura Programación Multimedia
+# Blas Pastillín
 
-Componentes:
-* el manu (jefe de equipo)
-* el alvaro
-* el nico
+Componentes del grupo:
+* [Manuel Sancho Montañés](https://github.com/ElManu3le) (jefe de equipo)
+* [Álvaro Silva Bolea](https://github.com/alvarosilvabolea)
+* [Nicolás Pérez Prades](https://github.com/nico-perez)
 
-* [el trello](https://trello.com/b/rPLVdcRp/proyectoprogmultiev1)
-hola gente
+* [Nuestro trello](https://trello.com/b/rPLVdcRp/proyectoprogmultiev1)
