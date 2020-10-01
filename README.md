@@ -1,2 +1,9 @@
-# ProyectoVideojuego
-Proyecto grupal para crear un videojuego
+### Proyecto videojuego EV1 de la asignatura Programación Multimedia
+# Blas Pastillín
+
+Componentes del grupo:
+* [Manuel Sancho Montañés](https://github.com/ElManu3le) (jefe de equipo)
+* [Álvaro Silva Bolea](https://github.com/alvarosilvabolea)
+* [Nicolás Pérez Prades](https://github.com/nico-perez)
+
+[Nuestro trello](https://trello.com/b/rPLVdcRp/proyectoprogmultiev1)
