@@ -17,7 +17,15 @@
                     "name": "mirar_alrededor",
                     "type": "Value",
                     "id": "4f09b25f-9945-4539-b0b1-db3c1d0cdf58",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Stick",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "saltar",
+                    "type": "Button",
+                    "id": "b96a2484-d472-46c2-8005-bf1beaf8a848",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -97,6 +105,83 @@
                     "processors": "",
                     "groups": "",
                     "action": "mirar_alrededor",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "2D Vector",
+                    "id": "fbb0b0e7-1cfd-4e4d-b770-63e6af77583f",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "mirar_alrededor",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "d12b7eac-c34a-4ffa-b567-d3b1ee516bf1",
+                    "path": "<Mouse>/delta/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "mirar_alrededor",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "baa2b84e-b9ca-4ce1-8c6b-05234042dcd3",
+                    "path": "<Mouse>/delta/y",
+                    "interactions": "",
+                    "processors": "Invert",
+                    "groups": "",
+                    "action": "mirar_alrededor",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "c1f8c0d3-b028-4c43-811b-988ea1bcb51e",
+                    "path": "<Mouse>/delta/x",
+                    "interactions": "",
+                    "processors": "Invert",
+                    "groups": "",
+                    "action": "mirar_alrededor",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "ad22c12e-ddb7-48d6-bc18-681affac3f52",
+                    "path": "<Mouse>/delta/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "mirar_alrededor",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7a6f5d77-d53c-46e3-8293-fe4d51995b75",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "saltar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7583dc31-48a5-40d1-80ad-e63cc38b9c58",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "saltar",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
