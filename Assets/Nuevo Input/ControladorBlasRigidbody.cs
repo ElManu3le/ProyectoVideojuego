@@ -2,15 +2,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(CapsuleCollider))]
-public class BlasRigidbody : MonoBehaviour
+
+[RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
+public class ControladorBlasRigidbody : MonoBehaviour
 {
     public InputActionAsset controles;
+
     [Serializable]
     public class MovementSettings
     {
-        
         public float ForwardSpeed = 8.0f;   // Speed when walking forward
         public float BackwardSpeed = 4.0f;  // Speed when walking backwards
         public float StrafeSpeed = 4.0f;    // Speed when walking sideways
@@ -102,16 +102,8 @@ public class BlasRigidbody : MonoBehaviour
 
     public bool Running
     {
-        get
-        {
-#if !MOBILE_INPUT
-            return movementSettings.Running;
-#else
-	        return false;
-#endif
-        }
+        get { return movementSettings.Running; }
     }
-
 
     private void Start()
     {
@@ -130,7 +122,6 @@ public class BlasRigidbody : MonoBehaviour
             m_Jump = true;
         }
     }
-
 
     private void FixedUpdate()
     {
@@ -208,7 +199,7 @@ public class BlasRigidbody : MonoBehaviour
     {
 
         Vector2 input = controles["moverse"].ReadValue<Vector2>();
-        Debug.Log("eee controles " + input);
+        
         movementSettings.UpdateDesiredTargetSpeed(input);
         return input;
     }

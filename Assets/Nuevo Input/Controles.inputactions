@@ -28,6 +28,38 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "extender_brazo_izquierdo",
+                    "type": "Value",
+                    "id": "c6cf6f7f-78aa-4773-b212-8c720ae36419",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "extender_brazo_derecho",
+                    "type": "Value",
+                    "id": "21720688-4abe-456b-9a9d-9ca855925f85",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "agarrar_mano_derecha",
+                    "type": "Button",
+                    "id": "3ccbfd22-29f8-40ee-a1c4-5fdb144ca8ea",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "agarrar_mano_izquierda",
+                    "type": "Button",
+                    "id": "41cf045c-2c46-4bad-9c0d-b057adecdd75",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -182,6 +214,94 @@
                     "processors": "",
                     "groups": "",
                     "action": "saltar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3c01adb-3624-4895-9662-67174b566a28",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "extender_brazo_izquierdo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "900343cf-edb0-45a8-b096-4c6bc8621a25",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "extender_brazo_izquierdo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "899049e3-a6ac-4713-a90d-8dc071e56795",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "extender_brazo_derecho",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8e3273f4-9f65-42a6-a32c-6243f15e6ae8",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "agarrar_mano_derecha",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "61e101fc-95db-4b36-85ba-0173918817de",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "agarrar_mano_derecha",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bfd0cde5-d75c-4a1b-9b26-d5937db2f07c",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "agarrar_mano_izquierda",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bfe4b4a0-6504-4141-b066-8b4268fc484a",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "agarrar_mano_izquierda",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "05719a19-2ce8-4d3c-ba85-3b6b487be5b0",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "extender_brazo_derecho",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

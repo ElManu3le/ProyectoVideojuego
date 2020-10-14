@@ -16,11 +16,11 @@ public class ControladorInputBlas : MonoBehaviour
     [Range(1f, 100f)] // Multiplicador de velocidad
     public float mulv = 10f;
 
-    private void Update()
+    private void FixedUpdate()
     {
-        var vec_mov = mapa_acciones["moverse"].ReadValue<Vector2>() * Time.deltaTime * mulv;
-        contr.Move(new Vector3(vec_mov.x, -9.8f * Time.deltaTime, vec_mov.y));
-
+        var vec_mov = mapa_acciones["moverse"].ReadValue<Vector2>() * Time.fixedDeltaTime * mulv;
+        contr.Move(new Vector3(vec_mov.x, -9.8f * Time.fixedDeltaTime, vec_mov.y));
+        
     }
 
     void Awake()
