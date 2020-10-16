@@ -1,35 +1,58 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
-using UnityEngine;
 using TMPro;
-
+using UnityEngine;
 
 /// <summary>
 /// Para hacer que los Rigidbody apilados uno encima de otro
 /// comuniquen su masa noseque nosecuantas
 /// </summary>
+[ExecuteInEditMode]
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class Apilable : MonoBehaviour
 {
-    // Para debugiar
+    /// <summary><b>DEBUG</b> - texto de las cajas y tal</summary>
     public TextMeshPro[] texto = new TextMeshPro[6];
-
-    // Masas geteables publicamente
-    public float masa_apilada { get; private set; }
-#if UNITY_EDITOR
-    // Queremos que en el editor salga un cacharrín para poder modificar el valor directamente
-    public float masa_propia = 1.5f; // Odio esto con toda mi alma
-#else
-    public float masa_propia { get; private set; } // :(
-#endif
-    public float masa_total { get { return masa_propia + masa_apilada; } }
-
     // Datos a mano
     private Rigidbody rb;
     private int hash;
+
+    /// <summary>
+    /// Evento al que se pueden suscribir elementos que quieren 
+    /// enterarse de los cambios en una pila de objetos apilables.
+    /// </summary>
+    public event Action fin_de_propagacion;
+
+    /// <summary>
+    /// Masa que el apilable está recibiendo de otros apilables
+    /// que tiene encima.
+    /// </summary>
+    public float masa_apilada { get; private set; }
+
+    /// <summary>La masa del apilable, por su cuenta. Es «constante».</summary>
+#if UNITY_EDITOR
+    // Queremos que en el editor salga un cacharrín para poder modificar el valor directamente
+    [Min(0f)] public float masa_propia = 1.5f; // Odio esto con toda mi alma
+#else
+    // Esto, en teoría, es lo que se incluye en la «build» de verdad.
+    public float masa_propia { get; private set; } // :(
+#endif
+
+    /// <summary>
+    /// La parte de la masa total que el apilable <b>NO</b> está transmitiendo
+    /// a otros apilables.
+    /// </summary>
+    public float masa_restante { get; private set; }
+
+    /// <summary>
+    /// La suma de la masa propia más la masa apilada.
+    /// </summary>
+    public float masa_total { get { return masa_propia + masa_apilada; } }
+
+    /// <summary>Flag para actualizar masas y propagar cambios.</summary>
     private bool hay_que_actualizar_datos { get; set; }
+
+    /// <summary><b>DEBUG</b> - Flag para cambiar el texto.</summary>
     private bool hay_que_actualizar_texto { get; set; }
 
     /// <summary>
@@ -50,34 +73,32 @@ public class Apilable : MonoBehaviour
     /// la masa comunicado haciaabajo. La suma de todos los porcentajes de todas las 
     /// tuplas de la lista de un apilable debe estar siempre entre 0 y 1.
     /// </summary>
-    private Dictionary<int, (Apilable apilable, 
-                             int      num_contactos, 
-                             float    masa_transmitida)> apoyos = new Dictionary<int, (Apilable, int, float)>();
+    private Dictionary<int, (Apilable apilable,
+                             int num_contactos,  // Una serie de tipos entre paréntesis forman una tupla
+                             float masa_transmitida)> apoyos = new Dictionary<int, (Apilable, int, float)>();
 
     /// <summary>
-    /// Para distribuir la masa cuando parte está en contacto con colliders normales
-    /// y parte está en contacto con apilables.
+    /// Para las colisiones que no sean con apilable usamos otro diccionario, para
+    /// poder así distribuir la masa con propiedad. Creo.
     /// </summary>
-    private int otros_puntos_de_apoyo
-    { 
-        get => __otros_p;
-        set => __otros_p = value <= 0 ? 0 : value;
-    }
-    private int __otros_p = 0; // Variable privada para la propiedad «otros_puntos_de_apoyo»
+    private Dictionary<int, (Collider col,
+                             int num_contactos)> otros_apoyos = new Dictionary<int, (Collider, int)>();
 
     /// <summary>
     /// El total de puntos de apoyo se consigue sumando todos los puntos de la lista
     /// de apoyos con los puntos de apoyo que no pertenecen a apilables.
     /// </summary>    
-    private int total_puntos_de_apoyo 
-    { 
-        get 
+    private int total_puntos_de_apoyo
+    {
+        get
         {
             int acum_ptos = 0;
-            foreach (var par_clave_tupla in apoyos) 
+            foreach (var par_clave_tupla in apoyos)
                 acum_ptos += par_clave_tupla.Value.num_contactos;
-            return acum_ptos + otros_puntos_de_apoyo;
-        } 
+            foreach (var par_clave_tupla in otros_apoyos)
+                acum_ptos += par_clave_tupla.Value.num_contactos;
+            return acum_ptos;
+        }
     }
 
     // En start registra el apilable y rellena datos
@@ -106,40 +127,69 @@ public class Apilable : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Comprueba si el otro collider es apilable
-        if (apilables.TryGetValue(collision.gameObject.GetHashCode(), out Apilable otro))
+        // Nos guardamos los contactos en un array
+        ContactPoint[] contactos = new ContactPoint[collision.contactCount];
+        collision.GetContacts(contactos);
+
+        // Un contacto válido es el que se produce con un collider que está debajo
+        int num_contactos_validos = 0;
+
+        foreach (ContactPoint punto in contactos)
         {
-            
-            // Nos guardamos los contactos en un array
-            ContactPoint[] contactos = new ContactPoint[collision.contactCount];
-            collision.GetContacts(contactos);
-
-            // Un contacto válido es el que se produce con un apilable que está debajo
-            int num_contactos_validos = 0;
-
-            foreach (ContactPoint punto in contactos)
+            const float epsilon = 2 * float.Epsilon;
+            if (Vector3.Angle(Vector3.up, punto.normal) < 90f - epsilon)
             {
-                if (Vector3.Angle(Vector3.up, punto.normal) <= 90 - float.Epsilon)
+                // La normal de la colisión difiere en casi 90 grados o menos de Vector3.up
+                // (o sea, el otro collider está debajo)
+                num_contactos_validos++;
+                Debug.DrawRay(punto.point, punto.normal * .5f, Color.red, 2);
+            }
+        }
+
+        if (num_contactos_validos > 0)
+        {
+            int hash = collision.gameObject.GetHashCode();
+            // Comprueba si el otro collider es apilable
+            if (apilables.TryGetValue(hash, out Apilable otro))
+            {
+                try
                 {
-                    // La normal de la colisión difiere en casi 90 grados o menos de Vector3.up
-                    // (o sea, el otro collider está debajo)
-                    num_contactos_validos++;
-                    Debug.DrawRay(punto.point, punto.normal * .5f, Color.red, 2);
+                    if (otro.apoyos.ContainsKey(this.hash))
+                    {
+                        // No pueden estar los dos a la vez debajo del otro!!!!
+                        // Es un error, probablemente están al lado. Hay que eliminar
+                        // esta colisión del diccionario
+                        otro.apoyos.Remove(this.hash);
+                        otro.hay_que_actualizar_datos = true;
+                    }
+                    else
+                    {
+                        // Este apilable se apunta que tiene a otro ahí debajo
+                        apoyos.Add(otro.hash, (otro, num_contactos_validos, 0f /* se calcula luego */));
+                    }
+                }
+                catch (System.ArgumentException)
+                {
+                    Debug.Log("Excepcion en OnCollisionEnter->Es apilable");
                 }
             }
-
-            if (num_contactos_validos > 0)
+            else
             {
-                // Este apilable se apunta que tiene a otro ahí debajo
-                apoyos.Add(otro.hash, (otro, num_contactos_validos, 0f /* se calcula luego */));
-                hay_que_actualizar_datos = true;
+                try
+                {
+                    otros_apoyos.Add(hash, (collision.collider, num_contactos_validos));
+                }
+                catch (System.ArgumentException)
+                {
+                    Debug.Log("Excepcion en OnCollisionEnter->Es collider");
+                }
             }
+            hay_que_actualizar_datos = true;
         }
-        else
-        {
-            // Esto no frunga
-            // otros_puntos_de_apoyo += collision.contactCount;
-        }
+    }
+
+    private void OnCollisionStay()
+    {
     }
 
     private void OnCollisionExit(Collision collision)
@@ -149,18 +199,21 @@ public class Apilable : MonoBehaviour
         {
             if (apoyos.TryGetValue(otro.hash, out (Apilable ap, int ctos, float masa) tupla))
             {
-
                 otro.masa_apilada -= tupla.masa;
                 otro.actualizar_datos();
                 apoyos.Remove(otro.hash);
-                hay_que_actualizar_datos = true;
             }
         }
         else
         {
-            // Pffffffffff
-            // otros_puntos_de_apoyo -= collision.contactCount;
+            int hash = collision.gameObject.GetHashCode();
+            //if (otros_apoyos.TryGetValue(hash, out (Collider col, int ctos) tupla))
+            if (otros_apoyos.ContainsKey(hash))
+            {
+                otros_apoyos.Remove(hash);
+            }
         }
+        hay_que_actualizar_datos = true;
     }
 
     [ExecuteInEditMode]
@@ -170,6 +223,16 @@ public class Apilable : MonoBehaviour
             rb = GetComponent<Rigidbody>();
         rb.mass = masa_propia;
         actualizar_texto();
+    }
+
+
+    /// <summary>
+    /// Si el evento fin_de_propagacion tiene suscriptores,
+    /// lo invoca.
+    /// </summary>
+    private void comunicar_fin_de_propagacion()
+    {
+        fin_de_propagacion?.Invoke();
     }
 
     public void actualizar_datos()
@@ -197,11 +260,28 @@ public class Apilable : MonoBehaviour
         hay_que_actualizar_texto = true;
     }
 
-    ///<summary><b>(DEBUG)</b> - Actualiza los TextMeshPro para que casen con los valores reales</summary>
+    ///<summary>
+    ///<b>DEBUG</b> - Actualiza los TextMeshPro para que casen con los valores reales.
+    ///</summary>
     public void actualizar_texto()
     {
         foreach (TextMeshPro t in texto)
             t.text = masa_propia + "\n" + masa_apilada;
         hay_que_actualizar_texto = false;
+    }
+
+    /// <summary>
+    /// Método para comprobar, desde fuera de la clase, si un
+    /// GameObject tiene un componente apilable.
+    /// </summary>
+    /// <param name="hash_de_gameobject">
+    /// Entero devuelto por <tt>
+    ///     <see cref="Object.GetHashCode()">Object.GetHashCode()</see>
+    /// </tt>
+    /// </param>
+    /// <returns>El apilable, si se ha encontrado, o null.</returns>
+    public static bool es_apilable(int hash_de_gameobject, out Apilable apilable)
+    {
+        return apilables.TryGetValue(hash_de_gameobject, out apilable);
     }
 }

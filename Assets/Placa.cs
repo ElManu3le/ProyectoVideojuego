@@ -2,36 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Placa : MonoBehaviour
+[RequireComponent(typeof(Collider))]
+public class Placa : MonoBehaviour, IMecanismoContinuo, IMecanismoActivable
 {
-    float masatotal = 0;
+    public float peso_soportado { get; private set; }
+    [Min(0f)] public float peso_necesario = 15f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
+    private int num_apilados = 0;
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.relativeVelocity);
-    }
-
-    Vector3 ant = Vector3.zero;
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.impulse != Vector3.zero)
+        if (Apilable.es_apilable(collision.gameObject.GetHashCode(), out var apilable))
         {
-            ant = collision.impulse;
+            apilable.fin_de_propagacion += callback_apilable;
+            Debug.Log("Evento añadido a la placa.");
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        Debug.Log("exit");
+        if (Apilable.es_apilable(collision.gameObject.GetHashCode(), out var apilable))
+        {
+            apilable.fin_de_propagacion -= callback_apilable;
+            Debug.Log("Evento quitado de la placa.");
+        }
+    }
+
+    private void callback_apilable()
+    {
+
     }
 }
