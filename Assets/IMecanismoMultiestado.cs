@@ -6,23 +6,11 @@
 /// estar activo o no activo. Por ejemplo: una caja (palanca) de cambios
 /// o un teclado numérico.
 /// </summary>
-public interface IMecanismoMultiestado
+public interface IMecanismoMultiestado : IMecanismo<Enum>
 {
-    /// <summary>
-    /// Cuántos estados diferentes tiene el mecanismo.
-    /// </summary>
-    /// <returns>Un entero mayor que cero.</returns>
-    int num_estados();
+    /// <summary>Cuántos estados diferentes tiene el mecanismo.</summary>
+    int num_estados { get; }
 
-    /// <summary>
-    /// En qué estado se encuentra el mecanismo.
-    /// </summary>
-    /// <returns>Un enum representando el estado.</returns>
-    Enum estado_actual();
-
-    /// <summary>
-    /// Cambia el estado del mecanismo.
-    /// </summary>
-    /// <param name="estado_nuevo">Nuevo estado al que poner el mecanismo.</param>
-    void cambiar_estado(Enum estado_nuevo);
+    /// <summary>En qué estado se encuentra el mecanismo.</summary>
+    Enum estado_actual { get; }
 }

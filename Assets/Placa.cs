@@ -6,30 +6,47 @@ using UnityEngine;
 public class Placa : MonoBehaviour, IMecanismoContinuo, IMecanismoActivable
 {
     public float peso_soportado { get; private set; }
+    private bool hay_que_recalcular_peso { get; set; }
     [Min(0f)] public float peso_necesario = 15f;
 
-    private int num_apilados = 0;
+    private Dictionary<int, float> apilables = new Dictionary<int, float>();
+    public int num_apilados { get { return apilables.Count; } }
+
+    private void FixedUpdate()
+    {
+        Debug.Log(peso_soportado);
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (Apilable.es_apilable(collision.gameObject.GetHashCode(), out var apilable))
+        int hash = collision.gameObject.GetHashCode();
+        if (Apilable.es_apilable(hash, out var apilable))
         {
             apilable.fin_de_propagacion += callback_apilable;
+            apilables.Add(hash, apilable.masa_restante);
+            peso_soportado += apilable.masa_restante;
             Debug.Log("Evento añadido a la placa.");
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (Apilable.es_apilable(collision.gameObject.GetHashCode(), out var apilable))
+        int hash = collision.gameObject.GetHashCode();
+        if (Apilable.es_apilable(hash, out var apilable))
         {
             apilable.fin_de_propagacion -= callback_apilable;
+            apilables.Remove(hash);
+            peso_soportado -= apilable.masa_restante;
             Debug.Log("Evento quitado de la placa.");
+            if (num_apilados == 0) peso_soportado = 0f;
         }
     }
 
-    private void callback_apilable()
+    private void callback_apilable(int hash, float nueva_masa)
     {
-
+        peso_soportado -= apilables[hash];
+        apilables[hash] = nueva_masa;
+        peso_soportado += apilables[hash];
     }
+
 }

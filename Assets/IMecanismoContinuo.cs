@@ -4,33 +4,16 @@
 /// Este tipo de mecanismos suelen tener un límite máximo y mínimo, como
 /// por ejemplo una placa de presión o un tirador.
 /// </summary>
-public interface IMecanismoContinuo
+public interface IMecanismoContinuo : IMecanismo<float>
 {
+    /// <summary>Valor mínimo que puede alcanzar el «desplazamiento» del mecanismo.</summary>
+    float min { get; set; }
+    /// <summary>Valor máximo que puede alcanzar el «desplazamiento» del mecanismo.</summary>
+    float max { get; set; }
+
     /// <summary>
     /// El estado continuo del mecanismo, que suele asociarse a algún tipo
-    /// de desplazamiento.
+    /// de desplazamiento. El valor debe encontrarse entre min y max.
     /// </summary>
-    /// <returns>Un float entre el límite mínimo y máximo del mecanismo.</returns>
-    float desplazamiento();
-
-    /// <summary>
-    /// Cambia el desplazamiento del mecanismo, manteniéndolo entre los
-    /// límites mínimo y máximo.
-    /// </summary>
-    void cambiar_despl(float nuevo_despl);
-
-    /// <summary>
-    /// El desplazamiento del mecanismo, normalizado para comprenderlo entre
-    /// los valores 0 y 1.
-    /// </summary>
-    /// <returns>Un float entre 0 y 1.</returns>
-    float despl_normalizado();
-
-    /// <summary>
-    /// Los límites mínimo y máximo del mecanismo.
-    /// </summary>
-    /// <returns>
-    /// Una tupla con los valores float mínimo y el máximo, en ese orden.
-    /// </returns>
-    (float min, float max) despl_min_max();
+    float desplazamiento { get; }
 }

@@ -21,7 +21,7 @@ public class Apilable : MonoBehaviour
     /// Evento al que se pueden suscribir elementos que quieren 
     /// enterarse de los cambios en una pila de objetos apilables.
     /// </summary>
-    public event Action fin_de_propagacion;
+    public event Action<int, float> fin_de_propagacion;
 
     /// <summary>
     /// Masa que el apilable está recibiendo de otros apilables
@@ -104,13 +104,15 @@ public class Apilable : MonoBehaviour
     // En start registra el apilable y rellena datos
     private void Start()
     {
+        hash = gameObject.GetHashCode();
         // Autorregistro en el diccionario
-        apilables.Add(hash = gameObject.GetHashCode(), this);
+        if (!apilables.ContainsKey(hash)) apilables.Add(hash, this);
 
         // Setear datos
         rb = GetComponent<Rigidbody>();
         masa_apilada = 0f;
         masa_propia = rb.mass;
+        masa_restante = 0f;
     }
 
     // Actualizar datos
@@ -232,13 +234,14 @@ public class Apilable : MonoBehaviour
     /// </summary>
     private void comunicar_fin_de_propagacion()
     {
-        fin_de_propagacion?.Invoke();
+        fin_de_propagacion?.Invoke(hash, masa_restante);
     }
 
     public void actualizar_datos()
     {
         int contactos_de_este = total_puntos_de_apoyo;
         float masa_de_este = masa_total;
+        float total_masa_transmitida = 0f;
 
         List<int> claves = new List<int>(apoyos.Keys);
         for (int i = 0; i < claves.Count; ++i)
@@ -250,11 +253,14 @@ public class Apilable : MonoBehaviour
                 num_contactos,
                 (float)num_contactos / contactos_de_este * masa_de_este
             );
-
+            total_masa_transmitida += apoyos[hash].masa_transmitida;
             float masa_delta = apoyos[hash].masa_transmitida - masa_antigua;
             apoyos[hash].apilable.masa_apilada += masa_delta;
             apoyos[hash].apilable.actualizar_datos();
         }
+
+        masa_restante = masa_total - total_masa_transmitida;
+        if (otros_apoyos.Count > 0) comunicar_fin_de_propagacion();
 
         hay_que_actualizar_datos = false;
         hay_que_actualizar_texto = true;
