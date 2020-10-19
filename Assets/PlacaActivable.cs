@@ -1,38 +1,25 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class Placa : MonoBehaviour, IMecanismoContinuo, IMecanismoActivable
+public class PlacaActivable : MonoBehaviour, IMecanismoActivable
 {
-    public float peso_soportado { get; private set; }
-    private bool hay_que_recalcular_peso { get; set; }
     [Min(0f)] public float peso_necesario = 15f;
 
     private Dictionary<int, float> apilables = new Dictionary<int, float>();
 
-    public event Action /*IMecanismoContinuo*/limite_sobrepasado;
     public event Action /*IMecanismoActivable*/activado;
     public event Action /*IMecanismoActivable*/desactivado;
 
     public int num_apilados { get { return apilables.Count; } }
+    public float peso_soportado { get; private set; }
+    public bool estado_actual { get; private set; }
 
-    public float /*IMecanismoContinuo*/min => throw new NotImplementedException();
-
-    public float /*IMecanismoContinuo*/max => throw new NotImplementedException();
-
-    public float /*IMecanismoContinuo*/lim => throw new NotImplementedException();
-
-    float IMecanismo<float>.estado_actual { get => desplazamiento_placa; }
-    private float desplazamiento_placa;
-
-    bool IMecanismo<bool>.estado_actual { get => placa_activada; }
-    private bool placa_activada;
-
-    private void FixedUpdate()
+    private void Start()
     {
-        Debug.Log(peso_soportado);
+        peso_soportado = 0f;
+        estado_actual = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -43,7 +30,8 @@ public class Placa : MonoBehaviour, IMecanismoContinuo, IMecanismoActivable
             apilable.fin_de_propagacion += callback_apilable;
             apilables.Add(hash, apilable.masa_restante);
             peso_soportado += apilable.masa_restante;
-            Debug.Log("Evento añadido a la placa.");
+
+            invocar_evento_segun_estado();
         }
     }
 
@@ -55,8 +43,9 @@ public class Placa : MonoBehaviour, IMecanismoContinuo, IMecanismoActivable
             apilable.fin_de_propagacion -= callback_apilable;
             apilables.Remove(hash);
             peso_soportado -= apilable.masa_restante;
-            Debug.Log("Evento quitado de la placa.");
             if (num_apilados == 0) peso_soportado = 0f;
+
+            invocar_evento_segun_estado();
         }
     }
 
@@ -65,7 +54,22 @@ public class Placa : MonoBehaviour, IMecanismoContinuo, IMecanismoActivable
         peso_soportado -= apilables[hash];
         apilables[hash] = nueva_masa;
         peso_soportado += apilables[hash];
+
+        invocar_evento_segun_estado();
     }
 
+    private void invocar_evento_segun_estado()
+    {
+        if (!estado_actual && peso_soportado > peso_necesario)
+        { // Desactivado -> Activado
+            estado_actual = true;
+            activado?.Invoke();
+        }
+        else if (estado_actual && peso_soportado < peso_necesario)
+        { // Activado -> Desactivado
+            estado_actual = false;
+            desactivado?.Invoke();
+        }
+    }
 
 }
