@@ -8,9 +8,11 @@
 /// </summary>
 public interface IMecanismoMultiestado : IMecanismo<Enum>
 {
+    /// <summary>
+    /// Evento que se dispara cuando el mecanismo cambia de un estado a otro diferente.
+    /// </summary>
+    event Action cambio_de_estado;
+
     /// <summary>Cuántos estados diferentes tiene el mecanismo.</summary>
     int num_estados { get; }
-
-    /// <summary>En qué estado se encuentra el mecanismo.</summary>
-    Enum estado_actual { get; }
 }

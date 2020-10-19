@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +11,24 @@ public class Placa : MonoBehaviour, IMecanismoContinuo, IMecanismoActivable
     [Min(0f)] public float peso_necesario = 15f;
 
     private Dictionary<int, float> apilables = new Dictionary<int, float>();
+
+    public event Action /*IMecanismoContinuo*/limite_sobrepasado;
+    public event Action /*IMecanismoActivable*/activado;
+    public event Action /*IMecanismoActivable*/desactivado;
+
     public int num_apilados { get { return apilables.Count; } }
+
+    public float /*IMecanismoContinuo*/min => throw new NotImplementedException();
+
+    public float /*IMecanismoContinuo*/max => throw new NotImplementedException();
+
+    public float /*IMecanismoContinuo*/lim => throw new NotImplementedException();
+
+    float IMecanismo<float>.estado_actual { get => desplazamiento_placa; }
+    private float desplazamiento_placa;
+
+    bool IMecanismo<bool>.estado_actual { get => placa_activada; }
+    private bool placa_activada;
 
     private void FixedUpdate()
     {
@@ -48,5 +66,6 @@ public class Placa : MonoBehaviour, IMecanismoContinuo, IMecanismoActivable
         apilables[hash] = nueva_masa;
         peso_soportado += apilables[hash];
     }
+
 
 }

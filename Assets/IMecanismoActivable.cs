@@ -12,7 +12,4 @@ public interface IMecanismoActivable : IMecanismo<bool>
     event Action activado;
     /// <summary>Evento a lanzar cuando el mecanismo pase a estar desactivado.</summary>
     event Action desactivado;
-
-    /// <summary>Si el mecanismo se puede considerar activado o no.</summary>
-    bool esta_activado { get; }
 }
