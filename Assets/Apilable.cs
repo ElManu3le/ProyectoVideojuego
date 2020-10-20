@@ -7,14 +7,11 @@ using UnityEngine;
 /// Para hacer que los Rigidbody apilados uno encima de otro
 /// comuniquen su masa noseque nosecuantas
 /// </summary>
-[ExecuteInEditMode]
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class Apilable : MonoBehaviour
 {
-    /// <summary><b>DEBUG</b> - texto de las cajas y tal</summary>
-    public TextMeshPro[] texto = new TextMeshPro[6];
     // Datos a mano
-    private Rigidbody rb;
+    protected Rigidbody rb;
     private int hash;
 
     /// <summary>
@@ -52,8 +49,8 @@ public class Apilable : MonoBehaviour
     /// <summary>Flag para actualizar masas y propagar cambios.</summary>
     private bool hay_que_actualizar_datos { get; set; }
 
-    /// <summary><b>DEBUG</b> - Flag para cambiar el texto.</summary>
-    private bool hay_que_actualizar_texto { get; set; }
+    /// <summary>Flag para cambiar el texto.</summary>
+    protected bool hay_que_actualizar_texto { get; set; }
 
     /// <summary>
     /// Cada apilable se autorregistra en el diccionario con clave igual al
@@ -63,7 +60,7 @@ public class Apilable : MonoBehaviour
     /// no tenemos que llamar a la función <i>GetComponent</i> (que es, según
     /// tengo entendido, muy costosa), podemos simplemente mirar en el diccionario.
     /// </summary>
-    private static Dictionary<int, Apilable> apilables = new Dictionary<int, Apilable>();
+    protected static Dictionary<int, Apilable> apilables = new Dictionary<int, Apilable>();
 
     /// <summary>
     /// Cada apilable guarda un diccionario de referencias a otros apilables sobre
@@ -104,8 +101,8 @@ public class Apilable : MonoBehaviour
     // En start registra el apilable y rellena datos
     private void Start()
     {
-        hash = gameObject.GetHashCode();
         // Autorregistro en el diccionario
+        hash = super_hash();
         if (!apilables.ContainsKey(hash)) apilables.Add(hash, this);
 
         // Setear datos
@@ -119,12 +116,6 @@ public class Apilable : MonoBehaviour
     private void FixedUpdate()
     {
         if (hay_que_actualizar_datos) actualizar_datos();
-    }
-
-    // Actualizar visuales (debug)
-    private void Update()
-    {
-        if (hay_que_actualizar_texto) actualizar_texto();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -154,44 +145,28 @@ public class Apilable : MonoBehaviour
             // Comprueba si el otro collider es apilable
             if (apilables.TryGetValue(hash, out Apilable otro))
             {
-                try
+                if (otro.apoyos.ContainsKey(this.hash))
                 {
-                    if (otro.apoyos.ContainsKey(this.hash))
-                    {
-                        // No pueden estar los dos a la vez debajo del otro!!!!
-                        // Es un error, probablemente están al lado. Hay que eliminar
-                        // esta colisión del diccionario
-                        otro.apoyos.Remove(this.hash);
-                        otro.hay_que_actualizar_datos = true;
-                    }
-                    else
-                    {
-                        // Este apilable se apunta que tiene a otro ahí debajo
-                        apoyos.Add(otro.hash, (otro, num_contactos_validos, 0f /* se calcula luego */));
-                    }
+                    // No pueden estar los dos a la vez debajo del otro!!!!
+                    // Es un error, probablemente están al lado. Hay que eliminar
+                    // esta colisión del diccionario
+                    otro.apoyos.Remove(this.hash);
+                    otro.hay_que_actualizar_datos = true;
                 }
-                catch (System.ArgumentException)
+                else
                 {
-                    Debug.Log("Excepcion en OnCollisionEnter->Es apilable");
+                    // Este apilable se apunta que tiene a otro ahí debajo
+                    apoyos.Add(otro.hash, (otro, num_contactos_validos, 0f /* se calcula luego */));
                 }
             }
             else
             {
-                try
-                {
-                    otros_apoyos.Add(hash, (collision.collider, num_contactos_validos));
-                }
-                catch (System.ArgumentException)
-                {
-                    Debug.Log("Excepcion en OnCollisionEnter->Es collider");
-                }
+                // Este apilable tiene debajo un collider que no es apilable.
+                otros_apoyos.Add(hash, (collision.collider, num_contactos_validos));
             }
+
             hay_que_actualizar_datos = true;
         }
-    }
-
-    private void OnCollisionStay()
-    {
     }
 
     private void OnCollisionExit(Collision collision)
@@ -209,34 +184,41 @@ public class Apilable : MonoBehaviour
         else
         {
             int hash = collision.gameObject.GetHashCode();
-            //if (otros_apoyos.TryGetValue(hash, out (Collider col, int ctos) tupla))
             if (otros_apoyos.ContainsKey(hash))
             {
                 otros_apoyos.Remove(hash);
             }
         }
+
         hay_que_actualizar_datos = true;
     }
 
-    [ExecuteInEditMode]
-    private void OnValidate()
+    /// <summary>
+    /// No sé por qué tengo que hacer esto!!!! Si no es overrideado en superclases,
+    /// se invoca desde Apilable!!!! Pero no quiero el hash de apilable, quiero el
+    /// hash de la superclase. Y eso, al parecer, solo se puede conseguir overrideando
+    /// este método con el mismo código, exactamente.
+    /// </summary>
+    /// <returns>Hash del gameObject</returns>
+    protected virtual int super_hash()
     {
-        if (rb == null)
-            rb = GetComponent<Rigidbody>();
-        rb.mass = masa_propia;
-        actualizar_texto();
+        return gameObject.GetHashCode();
     }
 
-
     /// <summary>
-    /// Si el evento fin_de_propagacion tiene suscriptores,
-    /// lo invoca.
+    /// Si el evento fin_de_propagacion tiene suscriptores, lo invoca.
     /// </summary>
     private void comunicar_fin_de_propagacion()
     {
         fin_de_propagacion?.Invoke(hash, masa_restante);
     }
 
+    /// <summary>
+    /// Reparte la masa propia y la que se ha propagado entre todos los collider que tiene
+    /// debajo, según el número de puntos de contacto. Si uno o más collider no son apilables,
+    /// lanza el evento de fin_de_propagacion. Además, baja la flag hay_que_actualizar_datos
+    /// y sube hay_que_actualizar_texto.
+    /// </summary>
     public void actualizar_datos()
     {
         int contactos_de_este = total_puntos_de_apoyo;
@@ -266,23 +248,13 @@ public class Apilable : MonoBehaviour
         hay_que_actualizar_texto = true;
     }
 
-    ///<summary>
-    ///<b>DEBUG</b> - Actualiza los TextMeshPro para que casen con los valores reales.
-    ///</summary>
-    public void actualizar_texto()
-    {
-        foreach (TextMeshPro t in texto)
-            t.text = masa_propia + "\n" + masa_apilada;
-        hay_que_actualizar_texto = false;
-    }
-
     /// <summary>
     /// Método para comprobar, desde fuera de la clase, si un
     /// GameObject tiene un componente apilable.
     /// </summary>
     /// <param name="hash_de_gameobject">
     /// Entero devuelto por <tt>
-    ///     <see cref="Object.GetHashCode()">Object.GetHashCode()</see>
+    ///     <see cref="UnityEngine.Object.GetHashCode()">Object.GetHashCode()</see>
     /// </tt>
     /// </param>
     /// <returns>El apilable, si se ha encontrado, o null.</returns>
