@@ -6,7 +6,7 @@
 /// estar activo o no activo. Por ejemplo: una caja (palanca) de cambios
 /// o un teclado numérico.
 /// </summary>
-public interface IMecanismoMultiestado : IMecanismo<Enum>
+public interface IMecanismoMultiestado<T> : IMecanismo<T> where T: Enum
 {
     /// <summary>
     /// Evento que se dispara cuando el mecanismo cambia de un estado a otro diferente.

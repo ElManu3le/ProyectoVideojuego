@@ -13,6 +13,8 @@ public class PlacaActivable : MonoBehaviour, IMecanismoActivable
     [Min(0f)] public float peso_necesario = 15f;
     public TextMeshPro texto = null;
 
+    public Conexion[] conexiones = null;
+
     /// <summary>
     /// Apilables en contacto directo con la placa.
     /// </summary>
@@ -31,6 +33,14 @@ public class PlacaActivable : MonoBehaviour, IMecanismoActivable
     {
         peso_soportado = 0f;
         estado_actual = false;
+    }
+
+    private void Update()
+    {
+        foreach (var con in conexiones)
+        {
+            con.pctj = Mathf.Clamp(peso_soportado / peso_necesario, 0, 1);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

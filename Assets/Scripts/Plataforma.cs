@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider), typeof(Rigidbody))]
@@ -11,6 +12,16 @@ public class Plataforma : MonoBehaviour
     private Rigidbody este;
     private Vector3 pos_anterior_mundo;
 
+    private Animation animacion;
+    private Animator animador;
+    private AnimationClip clip;
+    private AnimatorController ctrl;
+
+    void cosa()
+    {
+        
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,11 +32,11 @@ public class Plataforma : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (este.velocity.sqrMagnitude < veloscidas.sqrMagnitude && veloscidas != Vector3.zero)
-        {
-            este.AddForce(veloscidas * Time.fixedDeltaTime, ForceMode.VelocityChange);
-        }
+        
+    }
 
+    private void LateUpdate()
+    {
         if (blas != null)
         {
             var delta_mundo = transform.position - pos_anterior_mundo;
