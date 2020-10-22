@@ -155,8 +155,12 @@ public class Apilable : MonoBehaviour
                 }
                 else
                 {
-                    // Este apilable se apunta que tiene a otro ahí debajo
-                    apoyos.Add(otro.hash, (otro, num_contactos_validos, 0f /* se calcula luego */));
+                    try
+                    {
+                        // Este apilable se apunta que tiene a otro ahí debajo
+                        apoyos.Add(otro.hash, (otro, num_contactos_validos, 0f /* se calcula luego */));
+                    }
+                    catch (ArgumentException) { } // Catcheamos esto por culpa de Blas
                 }
             }
             else
