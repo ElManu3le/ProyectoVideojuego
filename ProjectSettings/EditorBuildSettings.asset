@@ -4,5 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/ProBuilder/Niveles/lv3.unity
+    guid: 786efa0f6877e9441971fc3ad716660c
+  - enabled: 1
+    path: Assets/Scenes/ProBuilder/Niveles/lv2.unity
+    guid: c658e27dc9670234f9ac08e1be6bdfa0
+  - enabled: 1
+    path: Assets/Scenes/ProBuilder/Niveles/lv1.unity
+    guid: 5894e23b0da89fe4e8b203cfe501fef5
+  - enabled: 1
+    path: Assets/Scenes/ProBuilder/Niveles/menu.unity
+    guid: 35aa4fb4fe5a380418aea3f4cca5ecc8
   m_configObjects: {}

@@ -1,0 +1,45 @@
+{
+    "name": "ControlMenu",
+    "maps": [
+        {
+            "name": "controles",
+            "id": "a88b552a-c839-496b-9634-b00330e49619",
+            "actions": [
+                {
+                    "name": "empezar partida",
+                    "type": "Button",
+                    "id": "13cb3085-227f-4a93-9ba6-63eefb2da1f9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "560be88f-c8a8-4092-95c5-4ab0057d14a4",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controlador",
+                    "action": "empezar partida",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Controlador",
+            "bindingGroup": "Controlador",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
