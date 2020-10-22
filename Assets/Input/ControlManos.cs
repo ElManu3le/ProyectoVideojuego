@@ -29,9 +29,10 @@ public class ControlManos : MonoBehaviour
         float ebi = controles["extender_brazo_izquierdo"].ReadValue<float>();
         objetivo_izq = Vector3.Lerp(pos_ideal_cerca_izq.position, pos_ideal_lejos_izq.position, ebi);
         float dist = Vector3.Distance(objetivo_izq, mano_izq.position);
-        if (dist > .05f) mano_izq.AddForce((objetivo_izq - mano_izq.position) * 100);
+        if (dist > .05f) mano_izq.position = Vector3.MoveTowards(mano_izq.position, objetivo_izq, .5f);
         else mano_izq.velocity = Vector3.zero;
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
