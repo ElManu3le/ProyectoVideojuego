@@ -19,7 +19,7 @@ public class ControlManos : MonoBehaviour
     {
         mano_der = GameObject.Find("Mano Derecha").GetComponent<Rigidbody>();
         mano_izq = GameObject.Find("Mano Izquierda").GetComponent<Rigidbody>();
-
+        
         objetivo_der = pos_ideal_cerca_der.position;
         objetivo_izq = pos_ideal_cerca_izq.position;
     }
