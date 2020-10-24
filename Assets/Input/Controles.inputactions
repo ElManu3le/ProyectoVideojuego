@@ -60,6 +60,38 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "mando_boton_oeste",
+                    "type": "Button",
+                    "id": "a031427d-ad29-49f8-8d6e-3ebb47a4fdd0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "mando_boton_este",
+                    "type": "Button",
+                    "id": "fd43a58a-fc5d-4439-86b5-5f1d781dbb45",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "mando_boton_norte",
+                    "type": "Button",
+                    "id": "62f55cfc-719f-4e8e-b0d1-521590986556",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "mando_boton_sur",
+                    "type": "Button",
+                    "id": "28cfb7c1-c337-4173-b49e-55460b589986",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -302,6 +334,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "extender_brazo_derecho",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5e6269f9-4b8f-415b-b19a-fd3741d4b886",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "mando_boton_oeste",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ad585b3d-3a9e-45e8-8c3f-eda715fa5023",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "mando_boton_este",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d8f3d194-f2ce-4ada-a422-64ba3ce22f4a",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "mando_boton_norte",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8279bb29-9b54-4d0b-9c85-e02212f508f6",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "mando_boton_sur",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -5,12 +5,11 @@ using UnityEngine.InputSystem;
 [Serializable]
 public class MirarRaton
 {
-    public InputActionAsset controles;
     public float XSensitivity = 2f;
     public float YSensitivity = 2f;
     public bool clampVerticalRotation = true;
-    public float MinimumX = -90F;
-    public float MaximumX = 90F;
+    public float MinimumX = -89.99F;
+    public float MaximumX = 89.99F;
     public bool smooth;
     public float smoothTime = 5f;
     public bool lockCursor = true;
@@ -19,11 +18,13 @@ public class MirarRaton
     private Quaternion m_CharacterTargetRot;
     private Quaternion m_CameraTargetRot;
     private bool m_cursorIsLocked = true;
+    private InputActionAsset controles;
 
-    public void Init(Transform character, Transform camera)
+    public void Init(Transform character, Transform camera, InputActionAsset Blas_controles)
     {
         m_CharacterTargetRot = character.localRotation;
         m_CameraTargetRot = camera.localRotation;
+        controles = Blas_controles;
     }
 
 
@@ -109,16 +110,6 @@ public class MirarRaton
         q.x = Mathf.Tan(0.5f * Mathf.Deg2Rad * angleX);
 
         return q;
-    }
-
-    private void OnEnable()
-    {
-        controles.Enable();
-    }
-
-    private void OnDisable()
-    {
-        controles.Disable();
     }
 }
 

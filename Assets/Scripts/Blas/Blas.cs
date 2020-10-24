@@ -4,16 +4,22 @@ using UnityEngine.InputSystem;
 
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-public class ControladorBlasRigidbody : MonoBehaviour
+public class Blas : MonoBehaviour
 {
+    /// <summary>
+    /// La máscara de la capa Blas (capa nº 10)
+    /// </summary>
+    public static readonly LayerMask capa = 1 << 10;
+
     public InputActionAsset controles;
 
     [Serializable]
-    public class MovementSettings
+    public class Ajustes
     {
         public float ForwardSpeed = 8.0f;   // Speed when walking forward
         public float BackwardSpeed = 4.0f;  // Speed when walking backwards
         public float StrafeSpeed = 4.0f;    // Speed when walking sideways
+        public float AirMultiplier = .25f;
         public float RunMultiplier = 2.0f;   // Speed when sprinting
 
         public float JumpForce = 30f;
@@ -73,7 +79,7 @@ public class ControladorBlasRigidbody : MonoBehaviour
 
 
     public Camera cam;
-    public MovementSettings movementSettings = new MovementSettings();
+    public Ajustes movementSettings = new Ajustes();
     public MirarRaton mouseLook = new MirarRaton();
     public AdvancedSettings advancedSettings = new AdvancedSettings();
 
@@ -109,7 +115,7 @@ public class ControladorBlasRigidbody : MonoBehaviour
     {
         m_RigidBody = GetComponent<Rigidbody>();
         m_Capsule = GetComponent<CapsuleCollider>();
-        mouseLook.Init(transform, cam.transform);
+        mouseLook.Init(transform, cam.transform, controles);
     }
 
 
@@ -128,15 +134,17 @@ public class ControladorBlasRigidbody : MonoBehaviour
         GroundCheck();
         Vector2 input = GetInput();
 
-        if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && (advancedSettings.airControl || m_IsGrounded))
+        if (Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon && (m_IsGrounded || advancedSettings.airControl))
         {
             // always move along the camera forward as it is the direction that it being aimed at
             Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
             desiredMove = Vector3.ProjectOnPlane(desiredMove, m_GroundContactNormal).normalized;
 
-            desiredMove.x = desiredMove.x * movementSettings.CurrentTargetSpeed;
-            desiredMove.z = desiredMove.z * movementSettings.CurrentTargetSpeed;
-            desiredMove.y = desiredMove.y * movementSettings.CurrentTargetSpeed;
+            bool usar_mul_aire = !m_IsGrounded && advancedSettings.airControl;
+
+            desiredMove.x *= movementSettings.CurrentTargetSpeed * (usar_mul_aire ? movementSettings.AirMultiplier : 1f);
+            desiredMove.z *= movementSettings.CurrentTargetSpeed * (usar_mul_aire ? movementSettings.AirMultiplier : 1f);
+            desiredMove.y *= movementSettings.CurrentTargetSpeed * (usar_mul_aire ? movementSettings.AirMultiplier : 1f);
             if (m_RigidBody.velocity.sqrMagnitude <
                 (movementSettings.CurrentTargetSpeed * movementSettings.CurrentTargetSpeed))
             {
