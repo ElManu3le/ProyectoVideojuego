@@ -65,7 +65,6 @@ public class Blas : MonoBehaviour
         }
     }
 
-
     [Serializable]
     public class AdvancedSettings
     {
@@ -109,6 +108,11 @@ public class Blas : MonoBehaviour
     public bool Running
     {
         get { return movementSettings.Running; }
+    }
+
+    public void cambiar_masa(float masa)
+    {
+        m_RigidBody.mass += masa;
     }
 
     private void Start()

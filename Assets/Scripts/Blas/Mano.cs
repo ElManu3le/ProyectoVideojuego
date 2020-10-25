@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -42,24 +43,15 @@ public class Mano : MonoBlashaviour
     /// </summary>
     private Vector3 velocidad;
 
-    /// <summary>
-    /// Pffffffffffffffffffffffffffffffffffffffffffffffffff
-    /// </summary>
-    private Vector3 punto_mas_cercano = Vector3.zero;
-
-    /// <summary>
-    /// PPPPPPPPPPPPFffffffffffffffffffffffffffFFFFFFFFFFFFf
-    /// </summary>
-    private float lerp_entre_pos_actual_y_objetivo = 0f;
-
+    private float smooth_time_actual = ControlManos.Ajustes.smooth_time_sin_input;
 
     // Input
     private float extension_brazo = 0f;
     private bool agarrando = false;
 
-    // No sé
-    private bool en_contacto_con_algo = false,
-                 va_a_collidear = false;
+    private Collider candidato_al_agarre = null;
+    private bool candidato_agarrado = false;
+    float masa_agarrada = 0f;
 
     // Start is called before the first frame update
     private void Start()
@@ -86,8 +78,18 @@ public class Mano : MonoBlashaviour
 
     private void FixedUpdate()
     {
-        recalcular_objetivos();
-        rb.MovePosition(Vector3.SmoothDamp(transform.position, objetivo, ref velocidad, .005f));
+        calcular_limites();
+
+        calcular_objetivo_segun_input();
+
+        mover_mano_hacia_objetivo();
+
+        interactuar_con_objetos_de_la_escena();
+
+        if (candidato_agarrado)
+        {
+            gestionar_objeto_agarrado();
+        }
 
         //mover();
 
@@ -103,6 +105,25 @@ public class Mano : MonoBlashaviour
         //}
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (candidato_al_agarre == null && other.attachedRigidbody != null)
+        {
+            candidato_al_agarre = other;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (candidato_al_agarre == other)
+        {
+            candidato_al_agarre = null;
+            candidato_agarrado = false;
+            Blas.cambiar_masa(-masa_agarrada);
+            masa_agarrada = 0f;
+        }
+    }
+
     /// <summary>
     /// La mano no sabe si es la izquierda o la derecha, así que ControlManos tiene
     /// que pasarle el input que le corresponda.
@@ -115,8 +136,8 @@ public class Mano : MonoBlashaviour
         this.agarrando = agarrando > .5f;
     }
 
-    private static Vector3 half_extents = new Vector3(.15f,.15f,.15f);
-    private void recalcular_objetivos()
+    private static Vector3 half_extents = new Vector3(.15f, .15f, .15f);
+    private void calcular_limites()
     {
         pos_descanso = Vector3.Lerp(limite_cercano.position, limite_lejano.position, ControlManos.Ajustes.lerp_pos_descanso_manos);
         lim_posible_lejano = limite_lejano.position;
@@ -139,76 +160,156 @@ public class Mano : MonoBlashaviour
                 pos_descanso = lim_posible_lejano;
             }
         }
-        //else
-        //{
-        //    lim_posible_lejano = limite_lejano.position;
-        //    pos_descanso = Vector3.Lerp(limite_cercano.position, limite_lejano.position, ControlManos.Ajustes.lerp_pos_descanso_manos);
-        //}
-
-        objetivo = pos_descanso;
     }
 
-    /// <summary>
-    /// Esto está regulero. Mueve la mano
-    /// </summary>
-    /// <param name="extension">input</param>
-    private void mover()
+    private void calcular_objetivo_segun_input()
+    {
+        if (extension_brazo < .0001f)
+        {
+            objetivo = pos_descanso;
+            smooth_time_actual = ControlManos.Ajustes.smooth_time_sin_input;
+        }
+        else
+        {
+            float des_pos = Vector3.Distance(pos_descanso, lim_posible_lejano),
+                  des_lim = Vector3.Distance(pos_descanso, limite_lejano.position);
+
+            if (des_pos < des_lim)
+                objetivo = Vector3.Lerp(pos_descanso, lim_posible_lejano, extension_brazo + (des_lim - des_pos));
+            else
+                objetivo = Vector3.Lerp(pos_descanso, limite_lejano.position, extension_brazo);
+
+            smooth_time_actual = ControlManos.Ajustes.smooth_time_con_input;
+        }
+    }
+
+    private void mover_mano_hacia_objetivo()
     {
         //lerp_entre_pos_actual_y_objetivo = Mathf.MoveTowards(
         //    lerp_entre_pos_actual_y_objetivo, 
         //    extension, 
         //    ControlManos.Ajustes.max_vel_cambio_objetivo
         //);
-        if (!en_contacto_con_algo && !va_a_collidear)
-            objetivo = Vector3.Lerp(
-                pos_descanso,
-                limite_lejano.position,
-                lerp_entre_pos_actual_y_objetivo
-            );
-        //float dist = Vector3.Distance(objetivo, transform.position);
 
+        float dist = Vector3.Distance(objetivo, transform.position);
         //punto_mas_cercano = Mates.PuntoMasCercanoASegmento(
-        //    transform.position, 
-        //    pos_ideal_cerca.position, 
-        //    pos_ideal_lejos.position
+        //    transform.position,
+        //    limite_lejano.position,
+        //    limite_cercano.position
         //);
         //float dist_pmc = (Vector3.Distance(punto_mas_cercano, transform.position));
+        //if (dist_pmc > .5f) transform.position = Vector3.MoveTowards(transform.position, punto_mas_cercano, dist_pmc - .5f);
 
-        ////if (dist_pmc > .5f) transform.position = Vector3.MoveTowards(transform.position, punto_mas_cercano, dist_pmc - .5f);
-        //if (dist > float.Epsilon) transform.position = Vector3.SmoothDamp(transform.position, objetivo, ref velocidad, .001f);
+        if (dist > float.Epsilon) 
+            rb.MovePosition(Vector3.SmoothDamp(transform.position, objetivo, ref velocidad, smooth_time_actual));
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private bool yoya = false;
+    private bool un_ftg = false;
+    private void interactuar_con_objetos_de_la_escena()
     {
-        Debug.Log("oncollisionenter");
-        en_contacto_con_algo = true;
-
-        ContactPoint[] contactos = new ContactPoint[collision.contactCount];
-        collision.GetContacts(contactos);
-
-        var otro_rb = collision.collider.attachedRigidbody;
-        if (otro_rb != null && !otro_rb.isKinematic)
-        {   // Se le puede dar una yoya
-            if (collision.contactCount > 0 && velocidad.magnitude > .1f)
+        if (!agarrando) // Peñetazo/empujón
+        {
+            if (Physics.BoxCast(
+                    transform.position,
+                    half_extents,
+                    transform.forward,
+                    out RaycastHit info,
+                    transform.rotation,
+                    .1f,
+                    Misc.ignorar_capas(Mano.capa, Blas.capa)
+                ) &&
+                info.collider.attachedRigidbody != null)
             {
-                foreach (var c in contactos)
-                {
-                    otro_rb.AddForceAtPosition(
-                        -c.normal * ControlManos.Ajustes.multiplicador_fuerza_blas, 
-                        c.point, 
-                        ForceMode.Impulse
-                    );
+                if (!yoya && !un_ftg && extension_brazo > .5f && velocidad.magnitude > 1.8f)
+                { // Yoya
+                    Debug.Log("Bro!!!!");
+                    info.collider.attachedRigidbody.AddForceAtPosition(Vector3.ClampMagnitude(-info.normal * ControlManos.Ajustes.multiplicador_yoya_blas, info.collider.attachedRigidbody.mass * 5), info.point, ForceMode.Impulse);
+                    yoya = true;
                 }
+                else if (velocidad.magnitude > .01f && extension_brazo > .01f)
+                { // Empujar suavecito
+                    Debug.Log("maaaan");
+                    info.collider.attachedRigidbody.AddForceAtPosition(-info.normal * ControlManos.Ajustes.multiplicador_empuje_blas, info.point, ForceMode.Force);
+                }
+                un_ftg = true;
+            }
+            else // Na
+            {
+                yoya = un_ftg = false;
             }
         }
-
-        objetivo = transform.position;
+        else if (candidato_al_agarre != null && !candidato_agarrado) // Pulsado el boton de agarrar!!!!
+        {
+            if (candidato_al_agarre.attachedRigidbody.mass < dos_tercios_masa_blas)
+            {
+                candidato_al_agarre.transform.parent = transform;
+                candidato_al_agarre.attachedRigidbody.useGravity = false;
+                candidato_al_agarre.attachedRigidbody.isKinematic = true;
+            }
+            candidato_agarrado = true;
+            masa_agarrada = candidato_al_agarre.attachedRigidbody.mass;
+            Blas.cambiar_masa(candidato_al_agarre.attachedRigidbody.mass);
+        }
     }
 
-    private void OnCollisionExit(Collision collision)
+    private float dos_tercios_masa_blas = 69f / 3f * 2f;
+    private void gestionar_objeto_agarrado()
     {
-        en_contacto_con_algo = false;
+        if (agarrando)
+        {
+            try
+            {
+                candidato_al_agarre.attachedRigidbody.AddForce((transform.position - candidato_al_agarre.gameObject.transform.position).normalized * masa_agarrada * ControlManos.Ajustes.multiplicador_empuje_blas * (extension_brazo + 1f), ForceMode.Force);
+            }
+            catch (NullReferenceException)
+            {
+                candidato_agarrado = false;
+                candidato_al_agarre = null;
+                Blas.cambiar_masa(-masa_agarrada);
+                masa_agarrada = 0f;
+            }
+        }
+        else
+        {
+            if (candidato_al_agarre.attachedRigidbody.mass < dos_tercios_masa_blas)
+            {
+                candidato_al_agarre.transform.parent = null;
+                candidato_al_agarre.attachedRigidbody.useGravity = true;
+                candidato_al_agarre.attachedRigidbody.isKinematic = false;
+            }
+            candidato_agarrado = false;
+            Blas.cambiar_masa(-masa_agarrada);
+            masa_agarrada = 0f;
+        }
     }
+
+    //private void no(Collision collision)
+    //{
+    //    Debug.Log("oncollisionenter");
+    //    en_contacto_con_algo = true;
+
+    //    ContactPoint[] contactos = new ContactPoint[collision.contactCount];
+    //    collision.GetContacts(contactos);
+
+    //    var otro_rb = collision.collider.attachedRigidbody;
+    //    if (otro_rb != null && !otro_rb.isKinematic)
+    //    {   // Se le puede dar una yoya
+    //        if (collision.contactCount > 0 && velocidad.magnitude > .1f)
+    //        {
+    //            foreach (var c in contactos)
+    //            {
+    //                otro_rb.AddForceAtPosition(
+    //                    -c.normal * ControlManos.Ajustes.multiplicador_yoya_blas, 
+    //                    c.point, 
+    //                    ForceMode.Impulse
+    //                );
+    //            }
+    //        }
+    //    }
+
+    //    objetivo = transform.position;
+    //}
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

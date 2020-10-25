@@ -25,27 +25,28 @@ public sealed class CajaApilable : Apilable
         actualizar_texto();
     }
 
-// El texto solo lo actualiza, en tiempo real, dentro del editor. En el juego
-// en sí, se supone que eso no pasará.
-#if UNITY_EDITOR
-    private void Update()
-    {
-        if (hay_que_actualizar_texto &&
-            texto != null &&
-            texto.Length > 0)
-        {
-            actualizar_texto();
-        }
-    }
-#endif
+//// El texto solo lo actualiza, en tiempo real, dentro del editor. En el juego
+//// en sí, se supone que eso no pasará.
+//#if UNITY_EDITOR
+//    private void Update()
+//    {
+//        if (hay_que_actualizar_texto &&
+//            texto != null &&
+//            texto.Length > 0)
+//        {
+//            actualizar_texto();
+//        }
+//    }
+//#endif
 
     ///<summary>
     ///Actualiza los TextMeshPro para que casen con los valores reales.
     ///</summary>
     public void actualizar_texto()
     {
-        foreach (TextMeshPro t in texto)
-            t.text = masa_propia.ToString("N1"); // N1 para que solo escriba un decimal.
+        foreach (TextMeshPro t in texto) // Solucion churrera!!!!!!
+         // t.text = masa_propia.ToString(((masa_propia * 10 % 10) > 0) ? "N1" : "G9"); // N1 para que solo escriba un decimal.
+            t.text = ((int)masa_propia).ToString();
         hay_que_actualizar_texto = false;
     }
 
