@@ -6,15 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/ProBuilder/Niveles/lv3.unity
-    guid: 786efa0f6877e9441971fc3ad716660c
-  - enabled: 1
-    path: Assets/Scenes/ProBuilder/Niveles/lv2.unity
-    guid: c658e27dc9670234f9ac08e1be6bdfa0
-  - enabled: 1
-    path: Assets/Scenes/ProBuilder/Niveles/lv1.unity
+    path: Assets/Scenes/Niveles/lv1.unity
     guid: 5894e23b0da89fe4e8b203cfe501fef5
   - enabled: 1
-    path: Assets/Scenes/ProBuilder/Niveles/menu.unity
-    guid: 35aa4fb4fe5a380418aea3f4cca5ecc8
+    path: Assets/Scenes/Niveles/lv2.unity
+    guid: c658e27dc9670234f9ac08e1be6bdfa0
+  - enabled: 1
+    path: Assets/Scenes/Niveles/lv3.unity
+    guid: 786efa0f6877e9441971fc3ad716660c
+  - enabled: 1
+    path: Assets/Scenes/Niveles/menu_inicio.unity
+    guid: 4c649fda039e5674aa7046f95c39afd6
+  - enabled: 1
+    path: Assets/Scenes/Niveles/seleccionador.unity
+    guid: 58128e63787e7d8428159d8144a2e987
+  - enabled: 1
+    path: Assets/Scenes/Niveles/TestMovimientoBlas.unity
+    guid: 2a9687fab8039674ea5d6296653b1989
   m_configObjects: {}
