@@ -9,14 +9,21 @@ public class ControlManos : MonoBlashaviour
     {
         public static float dist_extension_brazos { get; private set; }
         public static float max_vel_cambio_objetivo { get; private set; }
-        public static float multiplicador_fuerza_blas { get; private set; }
+        public static float multiplicador_yoya_blas { get; private set; }
+        public static float multiplicador_empuje_blas { get; private set; }
         public static float lerp_pos_descanso_manos { get; private set; }
+        public static float smooth_time_con_input { get; private set; }
+        public static float smooth_time_sin_input { get; private set; }
+
         static Ajustes()
         {
             dist_extension_brazos = 1.69f;
             max_vel_cambio_objetivo = .08f;
-            multiplicador_fuerza_blas = 69f;
+            multiplicador_yoya_blas = 25f;
+            multiplicador_empuje_blas = 8f;
             lerp_pos_descanso_manos = .4f;
+            smooth_time_con_input = .03f;
+            smooth_time_sin_input = .01f;
         }
     }
 
