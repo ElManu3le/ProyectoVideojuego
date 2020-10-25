@@ -18,6 +18,7 @@ public class cargadorniveles : MonoBehaviour
         {
             SceneManager.LoadScene("seleccionador", LoadSceneMode.Single);
             
+            
         }
 
         if (GUI.Button(new Rect(20, 150, 150, 30), "Salir juego"))
