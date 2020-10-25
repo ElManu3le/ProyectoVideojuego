@@ -13,26 +13,27 @@ public class ZonaMuerte : MonoBlashaviour
     private void Start()
     {
         audio = Blas.GetComponent<AudioSource>();
-        
     }
 
     private void OnTriggerEnter(Collider other)
     {
 
+       
         Debug.Log("Muerte! A!");
         if (other.gameObject.layer == 10)
         {
-
-            if (--vidas_restantes < 0)
+            
+            if (--vidas_restantes <= 0)
             {
-                vidas_restantes = 0;
-                SceneManager.LoadScene("menu_inicio");
+                vidas_restantes = 3;
+                SceneManager.LoadScene("menu_inicio");   
             }
-           /* else
+            else
             {
                 audio.Play();
                 StartCoroutine(moricion());
-            }*/
+            }
+
         }
     }
 
@@ -41,4 +42,6 @@ public class ZonaMuerte : MonoBlashaviour
         yield return new WaitForSeconds(.38f);
         Blas.transform.position = spawn.position;
     }
+
 }
+
