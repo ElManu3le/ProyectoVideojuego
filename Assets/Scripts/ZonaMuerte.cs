@@ -25,6 +25,8 @@ public class ZonaMuerte : MonoBlashaviour
             if (--vidas_restantes <= 0)
             {
                 vidas_restantes = 3;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 SceneManager.LoadScene("menu_inicio");   
             }
             else
