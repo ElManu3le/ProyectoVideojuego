@@ -54,21 +54,4 @@ public sealed class CajaApilable : Apilable
     {
         return gameObject.GetHashCode();
     }
-
-    new private void OnCollisionEnter(Collision collision)
-    {
-        base.OnCollisionEnter(collision);
-        if (collision.gameObject.layer == 10)
-        {
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, 1);
-        }
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.layer == 10)
-        {
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, 1);
-        }
-    }
 }

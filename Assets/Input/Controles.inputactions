@@ -96,7 +96,7 @@
                 {
                     "name": "camara1",
                     "type": "Button",
-                    "id": "82891a94-b47e-4233-87b1-087cf7a9f841",
+                    "id": "28f013bb-b27c-4572-80bb-ef55ebbaba99",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -104,7 +104,23 @@
                 {
                     "name": "camara2",
                     "type": "Button",
-                    "id": "0f7c01a6-7aae-4a08-91ab-db13b534432d",
+                    "id": "6a7a8274-9253-4201-9e99-ae5c16097d56",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "camara3",
+                    "type": "Button",
+                    "id": "6f02162a-2975-463b-ac91-0c119c61693d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "camara4",
+                    "type": "Button",
+                    "id": "cb6e0abd-8457-4d93-b628-74d0cf2d6a94",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -399,7 +415,7 @@
                 },
                 {
                     "name": "",
-                    "id": "1b63c5de-4e5f-4cf8-85cd-547fa4315c80",
+                    "id": "995d78a4-5e5e-4aa3-94f3-3ada5970e396",
                     "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
@@ -410,12 +426,34 @@
                 },
                 {
                     "name": "",
-                    "id": "e60f0491-26ee-4569-82de-c5242f6fffc4",
+                    "id": "1a771014-6ab6-48f5-87b5-e888ea06a9b6",
                     "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "camara2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5d4c14ef-4d34-44f5-b7e8-ea4ee1963c86",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "camara3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "36adef67-541a-4e67-b858-cae8d06cada8",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "camara4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
