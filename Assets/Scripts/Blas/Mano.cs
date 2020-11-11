@@ -12,6 +12,8 @@ public class Mano : MonoBlashaviour
     /// </summary>
     public static readonly LayerMask capa = 1 << 11;
 
+    public Animator anim;
+
     public Transform limite_cercano, limite_lejano;
     /// <summary>
     /// Lerp entre limite_cercano y limite_lejano
@@ -91,6 +93,8 @@ public class Mano : MonoBlashaviour
             gestionar_objeto_agarrado();
         }
 
+        animar_mano();
+
         //mover();
 
         //if (rb.SweepTest(transform.forward, out RaycastHit info, velocidad.magnitude))
@@ -103,6 +107,11 @@ public class Mano : MonoBlashaviour
         //{
         //    va_a_collidear = false;
         //}
+    }
+
+    private void animar_mano()
+    {
+        anim.SetBool("manocerrada", agarrando);
     }
 
     private void OnTriggerEnter(Collider other)

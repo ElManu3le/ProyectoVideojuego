@@ -8,7 +8,7 @@ public class MirarRaton
     public float XSensitivity = 2f;
     public float YSensitivity = 2f;
     public bool clampVerticalRotation = true;
-    public float MinimumX = -89.99F;
+    public float MinimumX = -69.99F;
     public float MaximumX = 89.99F;
     public bool smooth;
     public float smoothTime = 5f;

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using Cinemachine;
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class Blas : MonoBehaviour
@@ -76,8 +76,7 @@ public class Blas : MonoBehaviour
         public float shellOffset; //reduce the radius by that ratio to avoid getting stuck in wall (a value of 0.1f is nice)
     }
 
-
-    public Camera cam;
+    public Transform cam;
     public Ajustes movementSettings = new Ajustes();
     public MirarRaton mouseLook = new MirarRaton();
     public AdvancedSettings advancedSettings = new AdvancedSettings();
