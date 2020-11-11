@@ -92,6 +92,22 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "camara1",
+                    "type": "Button",
+                    "id": "82891a94-b47e-4233-87b1-087cf7a9f841",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "camara2",
+                    "type": "Button",
+                    "id": "0f7c01a6-7aae-4a08-91ab-db13b534432d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -378,6 +394,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "mando_boton_sur",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1b63c5de-4e5f-4cf8-85cd-547fa4315c80",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "camara1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e60f0491-26ee-4569-82de-c5242f6fffc4",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "camara2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
