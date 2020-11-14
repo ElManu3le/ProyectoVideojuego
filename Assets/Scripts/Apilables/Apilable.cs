@@ -118,7 +118,7 @@ public class Apilable : MonoBehaviour
         if (hay_que_actualizar_datos) actualizar_datos();
     }
 
-    protected void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         // Nos guardamos los contactos en un array
         ContactPoint[] contactos = new ContactPoint[collision.contactCount];
@@ -173,7 +173,7 @@ public class Apilable : MonoBehaviour
         }
     }
 
-    protected void OnCollisionExit(Collision collision)
+    private void OnCollisionExit(Collision collision)
     {
         // Comprueba si el otro collider es apilable
         if (apilables.TryGetValue(collision.gameObject.GetHashCode(), out Apilable otro))
