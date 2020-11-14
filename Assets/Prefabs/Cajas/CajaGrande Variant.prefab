@@ -167,6 +167,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 1305492820892864456}
   m_maskType: 0
+  _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
 --- !u!1 &3351855528712431533
@@ -336,6 +337,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 4065664093355262812}
   m_maskType: 0
+  _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
 --- !u!1 &7375531118159002365
@@ -505,6 +507,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 3465001882497666871}
   m_maskType: 0
+  _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
 --- !u!1 &7536184509529493231
@@ -674,6 +677,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6895894812037412644}
   m_maskType: 0
+  _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
 --- !u!54 &7739729164953628092
@@ -723,6 +727,7 @@ MonoBehaviour:
   - {fileID: 8158672381524035800}
   - {fileID: 5167322287542499800}
   - {fileID: 8607129557440974305}
+  prefab_astillas: {fileID: 1000011190285628, guid: beb3acff7ab73944fb8f470f24d74ed3, type: 3}
 --- !u!1001 &8249190751588784736
 PrefabInstance:
   m_ObjectHideFlags: 0

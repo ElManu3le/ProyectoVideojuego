@@ -55,6 +55,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.17
       objectReference: {fileID: 0}
+    - target: {fileID: 5813426875168128952, guid: 83efafaea1611784eb728bffa648ea81, type: 3}
+      propertyPath: prefab_astillas
+      value: 
+      objectReference: {fileID: 1000011190285628, guid: beb3acff7ab73944fb8f470f24d74ed3, type: 3}
     - target: {fileID: 8523136693563078512, guid: 83efafaea1611784eb728bffa648ea81, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.0512062

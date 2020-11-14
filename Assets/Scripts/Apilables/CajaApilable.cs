@@ -15,6 +15,11 @@ public sealed class CajaApilable : Apilable
     public TextMeshPro[] texto = null;
 
     /// <summary>
+    /// Esto es para cuando las cajas se chocan
+    /// </summary>
+    public GameObject prefab_astillas;
+
+    /// <summary>
     /// Esto es para que los cambios en el editor se actualicen inmediatamente, creo.
     /// </summary>
     private void OnValidate()
@@ -58,7 +63,12 @@ public sealed class CajaApilable : Apilable
     new private void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);
-        if (collision.gameObject.layer == 10)
+        if (collision.impulse.magnitude > .1f)
+        {
+            // plof!!!
+            Destroy(Instantiate(prefab_astillas, collision.transform.position, collision.transform.rotation), 1.3f);
+        }
+        if (collision.gameObject.layer == 10 || collision.gameObject.layer == 11)
         {
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, 1);
         }
@@ -66,7 +76,7 @@ public sealed class CajaApilable : Apilable
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.layer == 10)
+        if (collision.gameObject.layer == 10 || collision.gameObject.layer == 11)
         {
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, 1);
         }
