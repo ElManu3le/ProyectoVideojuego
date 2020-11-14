@@ -96,7 +96,9 @@
                 {
                     "name": "camara1",
                     "type": "Button",
-                    "id": "28f013bb-b27c-4572-80bb-ef55ebbaba99",
+
+                    "id": "ae78207d-92a8-4a11-8e8c-34b33601cbd8",
+
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -104,7 +106,9 @@
                 {
                     "name": "camara2",
                     "type": "Button",
-                    "id": "6a7a8274-9253-4201-9e99-ae5c16097d56",
+
+                    "id": "20a92d48-127c-4dcd-b453-69e2c47c6cc4",
+
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -112,7 +116,8 @@
                 {
                     "name": "camara3",
                     "type": "Button",
-                    "id": "6f02162a-2975-463b-ac91-0c119c61693d",
+
+                    "id": "36efc18f-fc72-4429-9ad8-883f03907013",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -120,7 +125,8 @@
                 {
                     "name": "camara4",
                     "type": "Button",
-                    "id": "cb6e0abd-8457-4d93-b628-74d0cf2d6a94",
+
+                    "id": "6e4940e9-f3aa-4e87-bd41-fd49026a9ef7",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -415,7 +421,7 @@
                 },
                 {
                     "name": "",
-                    "id": "995d78a4-5e5e-4aa3-94f3-3ada5970e396",
+                    "id": "0ccf04e3-1e8e-4f39-b1bd-beb9530f9f11",
                     "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
@@ -426,7 +432,7 @@
                 },
                 {
                     "name": "",
-                    "id": "1a771014-6ab6-48f5-87b5-e888ea06a9b6",
+                    "id": "d3d0832a-cfee-4c9f-9d31-0dcb3e83f949",
                     "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
@@ -437,7 +443,7 @@
                 },
                 {
                     "name": "",
-                    "id": "5d4c14ef-4d34-44f5-b7e8-ea4ee1963c86",
+                    "id": "8b5745a8-119f-419c-ac49-073d7ab42183",
                     "path": "<Keyboard>/3",
                     "interactions": "",
                     "processors": "",
@@ -448,7 +454,7 @@
                 },
                 {
                     "name": "",
-                    "id": "36adef67-541a-4e67-b858-cae8d06cada8",
+                    "id": "6d6a9e2e-3734-47b9-b7af-85858d1a3f6f",
                     "path": "<Keyboard>/4",
                     "interactions": "",
                     "processors": "",
