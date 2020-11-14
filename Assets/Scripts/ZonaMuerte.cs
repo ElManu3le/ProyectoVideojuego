@@ -17,6 +17,7 @@ public class ZonaMuerte : MonoBlashaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
        
         Debug.Log("Muerte! A!");
         if (other.gameObject.layer == 10)
@@ -34,6 +35,7 @@ public class ZonaMuerte : MonoBlashaviour
                 audio.Play();
                 StartCoroutine(moricion());
             }
+
         }
     }
 
@@ -42,4 +44,6 @@ public class ZonaMuerte : MonoBlashaviour
         yield return new WaitForSeconds(.38f);
         Blas.transform.position = spawn.position;
     }
+
 }
+
