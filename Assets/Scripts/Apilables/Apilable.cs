@@ -118,7 +118,7 @@ public class Apilable : MonoBehaviour
         if (hay_que_actualizar_datos) actualizar_datos();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected void OnCollisionEnter(Collision collision)
     {
         // Nos guardamos los contactos en un array
         ContactPoint[] contactos = new ContactPoint[collision.contactCount];

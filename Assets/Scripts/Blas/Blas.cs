@@ -77,7 +77,7 @@ public class Blas : MonoBehaviour
     }
 
 
-    public Camera cam;
+    public GameObject cam;
     public Ajustes movementSettings = new Ajustes();
     public MirarRaton mouseLook = new MirarRaton();
     public AdvancedSettings advancedSettings = new AdvancedSettings();

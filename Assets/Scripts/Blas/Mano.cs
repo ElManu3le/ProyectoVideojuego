@@ -18,6 +18,8 @@ public class Mano : MonoBlashaviour
     /// </summary>
     private Vector3 pos_descanso = Vector3.zero;
 
+    private Animator animator;
+
     /// <summary>
     /// El Rigidbody que va a tener obligatoriamente la mano.
     /// </summary>
@@ -60,6 +62,8 @@ public class Mano : MonoBlashaviour
         rb.isKinematic = true;
         rb.useGravity = false;
 
+        animator = GetComponentInChildren<Animator>();
+
         velocidad = Vector3.zero;
 
         lim_posible_lejano = limite_lejano.position = 
@@ -86,6 +90,8 @@ public class Mano : MonoBlashaviour
 
         interactuar_con_objetos_de_la_escena();
 
+        animar();
+
         if (candidato_agarrado)
         {
             gestionar_objeto_agarrado();
@@ -103,6 +109,12 @@ public class Mano : MonoBlashaviour
         //{
         //    va_a_collidear = false;
         //}
+    }
+
+    private void animar()
+    {
+        animator.SetBool("manocerrada", agarrando);
+        
     }
 
     private void OnTriggerEnter(Collider other)
