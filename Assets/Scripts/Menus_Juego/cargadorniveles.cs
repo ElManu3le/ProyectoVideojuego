@@ -27,6 +27,8 @@ public class cargadorniveles : MonoBehaviour
             
         }
 
+        GUI.Box(new Rect(500, 300, 500, 60), "El blas. Hecho por Álvaro Silva, Manuel Sancho y Nicolás Pérez.");
+
         
     }
 }

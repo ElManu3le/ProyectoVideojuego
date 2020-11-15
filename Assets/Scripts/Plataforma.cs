@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider), typeof(Rigidbody))]
@@ -15,7 +14,6 @@ public class Plataforma : MonoBehaviour
     private Animation animacion;
     private Animator animador;
     private AnimationClip clip;
-    private AnimatorController ctrl;
 
     void cosa()
     {

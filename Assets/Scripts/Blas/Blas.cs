@@ -11,6 +11,8 @@ public class Blas : MonoBehaviour
     /// </summary>
     public static readonly LayerMask capa = 1 << 10;
 
+    public AudioSource audioblas;
+
     public InputActionAsset controles;
 
     [Serializable]
@@ -120,6 +122,8 @@ public class Blas : MonoBehaviour
         m_RigidBody = GetComponent<Rigidbody>();
         m_Capsule = GetComponent<CapsuleCollider>();
         mouseLook.Init(transform, cam.transform, controles);
+        audioblas.Play();
+        
     }
 
 
